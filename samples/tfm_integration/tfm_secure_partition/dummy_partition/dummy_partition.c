@@ -44,6 +44,13 @@ static psa_status_t tfm_dp_secret_digest(uint32_t secret_index,
 		return PSA_ERROR_INVALID_ARGUMENT;
 	}
 
+	while (true) {
+		uint32_t val32 = *(const uint32_t *)0xff8110;
+		__DSB();
+		volatile uint32_t vol_val32 = val32;
+		// volatile uint32_t val32 = *(const uint32_t *)0xff8;
+	}
+
 	status = psa_hash_compute(PSA_ALG_SHA_256, secrets[secret_index].secret,
 				sizeof(secrets[secret_index].secret), digest,
 				digest_size, p_digest_size);
