@@ -23,6 +23,9 @@
 #include <zephyr/arch/cpu.h>
 #include <zephyr/sw_isr_table.h>
 
+#define GPIO_OUTSET_ADDR 0x40842508
+#define GPIO_OUTCLR_ADDR 0x4084250C
+#define GPIO_OUT_VAL (1 << 11)
 
 _ASM_FILE_PROLOGUE
 
@@ -44,6 +47,37 @@ GTEXT(z_arm_int_exit)
  *
  */
 SECTION_FUNC(TEXT, _isr_wrapper)
+	// 0x2800 0002
+	// OUTSET has this value, and should have 0x400 set.
+	// 0x2800 0402
+	// So first write this value to the address, and then back again to
+	// 0x2800 0002
+
+	// set Addr is 0x40842508
+	// clr Addr is 0x4084250C
+
+
+#if 1
+	ldr	r3, =GPIO_OUT_VAL
+
+	ldr	r2, =GPIO_OUTSET_ADDR
+	str	r3, [r2]
+
+delay:
+    ldr r2,=100         /* Duration of delay in iterations */
+delay_loop:
+    cmp r2, #0              /* Are we done yet? */
+    beq delay_done          /* If so, jump out */
+    sub r2,r2, #1           /* Otherwise, dec counter */
+    b delay_loop            /* and do another iteration */
+delay_done:
+
+	ldr	r2, =GPIO_OUTCLR_ADDR
+	str	r3, [r2]
+
+	mov r2, #0
+	mov r3, #0
+#endif
 
 #if defined(CONFIG_CPU_CORTEX_M)
 	push {r0,lr}		/* r0, lr are now the first items on the stack */
