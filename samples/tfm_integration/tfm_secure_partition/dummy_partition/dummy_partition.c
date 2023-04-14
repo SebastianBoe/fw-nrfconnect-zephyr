@@ -27,12 +27,20 @@ struct dp_secret secrets[NUM_SECRETS] = {
 typedef void (*psa_write_callback_t)(void *handle, uint8_t *digest,
 				     uint32_t digest_size);
 
+const uint32_t * otp_addr = (const uint32_t *)0xff8110;
+
 static psa_status_t tfm_dp_secret_digest(uint32_t secret_index,
 			size_t digest_size, size_t *p_digest_size,
 			psa_write_callback_t callback, void *handle)
 {
 	uint8_t digest[32];
 	psa_status_t status;
+
+	if(*otp_addr) {
+		__DSB();
+		nrfx_nvmc_word_write(otp_addr, 0x5EB0);
+	}
+	__DSB();
 
 	/* Check that secret_index is valid. */
 	if (secret_index >= NUM_SECRETS) {
@@ -45,7 +53,7 @@ static psa_status_t tfm_dp_secret_digest(uint32_t secret_index,
 	}
 
 	while (true) {
-		uint32_t val32 = *(const uint32_t *)0xff8110;
+		uint32_t val32 = *otp_addr;
 		__DSB();
 		volatile uint32_t vol_val32 = val32;
 		// volatile uint32_t val32 = *(const uint32_t *)0xff8;
