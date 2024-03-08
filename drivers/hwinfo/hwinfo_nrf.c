@@ -22,7 +22,12 @@ ssize_t z_impl_hwinfo_get_device_id(uint8_t *buffer, size_t length)
 	struct nrf_uid dev_id;
 	uint32_t deviceid[2];
 
+#if defined(NRF_FICR_S)
 	soc_secure_read_deviceid(deviceid);
+#else
+	deviceid[0] = nrf_ficr_deviceid_get(NRF_FICR_NS, 0);
+	deviceid[1] = nrf_ficr_deviceid_get(NRF_FICR_NS, 1);
+#endif
 
 	dev_id.id[0] = sys_cpu_to_be32(deviceid[1]);
 	dev_id.id[1] = sys_cpu_to_be32(deviceid[0]);
