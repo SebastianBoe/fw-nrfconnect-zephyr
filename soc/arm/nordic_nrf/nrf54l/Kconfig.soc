@@ -67,4 +67,46 @@ config ELV_GRTC_LFXO_ALLOWED
 
 endif # NRF_GRTC_TIMER
 
+if SOC_NRF54L15_ENGA
+
+config NRF_SPU_FLASH_REGION_SIZE
+	hex
+	default 0x4000
+	# This option does not apply to 54, but we pretend the HW has this limitation
+	# for now for easier porting. NCSDK-25023
+	help
+	  FLASH region size for the NRF_SPU peripheral. For nrf54 the 
+	  region size is configurable per-region so this option does
+	  not apply.
+
+config NRF_SPU_FLASH_REGION_ALIGNMENT
+	hex
+	default 0x4000
+	# This option does not apply to 54, but we pretend the HW has this limitation
+	# for now for easier porting. NCSDK-25023
+	help
+	  FLASH region size for the NRF_SPU peripheral. For nrf54 the 
+	  region size is configurable per-region so this option does
+	  not apply.
+
+config NRF_SPU_RAM_REGION_SIZE
+	hex
+	default 0x2000
+	# This HW limitation does not apply to 54, but we pretend
+	# it does for now for easier porting. NCSDK-25023
+	help
+	  RAM region size for the NRF_SPU peripheral. For nrf54 the 
+	  region size is configurable per-region so this option does
+	  not apply.
+
+
+config NRF_SPU_RAM_REGION_ALIGNMENT
+	hex
+	default 0x1000
+	help
+	  RAM regions must be aligned to this value due to SPU HW
+	  limitations.
+
+endif # SOC_NRF54L15_ENGA
+
 endif # SOC_SERIES_NRF54LX
