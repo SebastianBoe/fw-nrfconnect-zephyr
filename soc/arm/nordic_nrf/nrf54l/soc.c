@@ -43,7 +43,7 @@ static int nordicsemi_nrf54l_init(void)
 	sys_cache_instr_enable();
 
 	if (IS_ENABLED(CONFIG_SOC_NRF54L_GLITCHDET_WORKAROUND)) {
-		nrf_glitchdet_enable_set(NRF_GLITCHDET, false);
+		//nrf_glitchdet_enable_set(NRF_GLITCHDET, false);
 	}
 
 #if DT_ENUM_HAS_VALUE(LFXO_NODE, load_capacitors, internal)

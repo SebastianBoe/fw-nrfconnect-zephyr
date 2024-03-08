@@ -49,7 +49,7 @@ config SOC_NRF54L_NORMAL_VOLTAGE_MODE
 
 config SOC_NRF54L_GLITCHDET_WORKAROUND
 	bool "Workaround that disables glitch detector"
-	default y
+	#default y if !BUILD_WITH_TFM
 	help
 	  Temporary workaround - disabling glitch detector to limit power consumption.
 
