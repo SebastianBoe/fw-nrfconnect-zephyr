@@ -16,4 +16,13 @@ config CORTEX_M_SYSTICK
 config CACHE_NRF_CACHE
 	default y if EXTERNAL_CACHE
 
+config SOC_NRF54LX_DISABLE_FICR_TRIMCNF
+	bool "Skip clock frequency configuration in system initialization"
+	default y if TRUSTED_EXECUTION_NONSECURE
+	help
+	  Disable trimming of the device. When the device is trimmed it
+	  will copy all the trimming values from FICR into the target
+	  addresses. When TF-M is enabled it will trim the device before
+	  booting this image.
+
 endif # SOC_SERIES_NRF54LX
