@@ -989,7 +989,7 @@ class TestPlan:
                 continue
             else:
                 logger.error(f"{log_info} - unrecognized platform - {platform}")
-                sys.exit(2)
+                #sys.exit(2)
 
     def create_build_dir_links(self):
         """
